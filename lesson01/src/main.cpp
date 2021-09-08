@@ -3,6 +3,7 @@
 
 // таким образом подключаются наши функции
 #include "simple_sum.h"
+#include "some_math.h"
 
 int main() {
     // таким образом выводятся сообщения в консоль
@@ -32,6 +33,8 @@ int main() {
     values.push_back(35);
     values.push_back(4);
     std::cout << "values size after more push_back: " << values.size() << std::endl;
+    std::cout << "f1=" << fibbonachiRecursive(7) << std::endl;
+    std::cout << "f2=" << fibbonachiFast(7) << std::endl;
 
     // TODO 07 выведите в консоль каждый элемент из динамического массива
     for (int i = 0; i < values.size(); ++i) {
