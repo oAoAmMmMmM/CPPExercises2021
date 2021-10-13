@@ -8,10 +8,10 @@ cv::Mat convertBGRToGray(cv::Mat img) {
     int width = img.cols;
     cv::Mat grayscaleImg(height, width, CV_32FC1); // в этой картинке мы сохраним черно-белую версию (оттенки серого)
     // давайте поймем что означает тип картинки CV_32FC1:
-    //                                          CV = Computer Vision (библиотека в целом называетсяOpenCV)
-    //                                             32F = 32-битное floating число, т.е. вещественное число типа float
-    //                                                С1 = 1 channel = один канал - вещественное число описывающее насколько этот пиксель яркий:
-    //                                                                                                            (0.0 - черный, 255.0 = белый)
+    // CV = Computer Vision (библиотека в целом называетсяOpenCV)
+    // 32F = 32-битное floating число, т.е. вещественное число типа float
+    // С1 = 1 channel = один канал - вещественное число описывающее насколько этот пиксель яркий:
+    // (0.0 - черный, 255.0 = белый)
 
     for (int j = 0; j < height; ++j) {
         for (int i = 0; i < width; ++i) {
@@ -19,12 +19,14 @@ cv::Mat convertBGRToGray(cv::Mat img) {
             unsigned char blue = color[0];
             unsigned char green = color[1];
             unsigned char red = color[2];
-
+            cv::Vec3b c = img.at<cv::Vec3b>(j, i);
+            int r = c[2];
+            int g = c[1];
+            int b = c[0];
             // TODO реализуйте усреднение яркости чтобы получить серый цвет
             //  - обратите внимание что если складывать unsigned char - сумма может переполниться, поэтому перед сложением их стоит преобразовать в int или float
             //  - загуглите "RGB to grayscale formula" - окажется что правильно это делать не усреднением в равных пропорциях, а с другими коэффициентами
-            float grayIntensity = 0.0f;
-
+            float grayIntensity = 0.299*r+ 0.587*g+ 0.114*b;
             grayscaleImg.at<float>(j, i) = grayIntensity;
         }
     }
