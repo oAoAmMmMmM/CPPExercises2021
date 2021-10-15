@@ -21,11 +21,10 @@ void testBGRToGray() {
 void testSobel(const std::string &name) {
     cv::Mat img = cv::imread("lesson05/data/" + name + ".jpg");
     rassert(!img.empty(), 23981920813);
-
+    cv::Mat bw = convertBGRToGray(img);
     // TODO реализуйте функцию считающую применение оператора Собеля к картинке
     // т.е. посчитайте производную по x и по y (в каждом пикселе хранятся две эти производные)
-    cv::Mat dxy = sobelDXY(img); // обратите внимание что внутри ждут черно-белую картинку, значит нашу картинку надо перед Собелем преобразовать
-
+    cv::Mat dxy = sobelDXY(bw); // обратите внимание что внутри ждут черно-белую картинку, значит нашу картинку надо перед Собелем преобразовать
     cv::Mat dx = convertDXYToDX(dxy); // TODO реализуйте функцию которая вытаскивает силу производной по x (ее абсолютное значение)
     // TODO и удостоверьтесь что результат выглядит так как вы ожидаете, если нет - спросите меня
     cv::imwrite("lesson05/resultsData/" + name + "_dx.jpg", dx);
@@ -50,6 +49,7 @@ int main() {
         }
 
         for (int i = 1; i <= 4; ++i) {
+            testSobel("line1" + std::to_string(i));
             // TODO сделайте вызов тестирования картинок line11.jpg - line14.jpg
         }
 
