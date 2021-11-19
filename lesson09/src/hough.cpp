@@ -31,12 +31,12 @@ cv::Mat buildHough(cv::Mat sobel) {
     int max_r = sqrt(sobel.cols * sobel.cols + sobel.rows * sobel.rows) ; //  замените это число так как вам кажется правильным (отталкиваясь от разрешения картинки - ее ширины и высоты)
     std::cout << "max_r  = " << max_r << std::endl;
     // создаем картинку-аккумулятор, в которой мы будем накапливать суммарные голоса за прямые
-    // так же известна как пространство Хафа
+    // так же известна как пространство Хафа kjkufhkuhfkus
     cv::Mat accumulator(max_r, max_theta, CV_32FC1,
                         0.0f); //  подумайте какого разрешения она должна быть и поправьте ее размер
     for (int i = 0; i < max_r; ++i) {
         for (int j = 0; j < max_theta; ++j) {
-            accumulator.at<float>(i, j) = 0;
+            accumulator.at<float>(i, j) =  0;
         }
     }
     //  не забудьте заполнить эту матрицу-картинку-аккумулятор нулями (очистить)
