@@ -54,18 +54,17 @@ void test(std::string name) {
             max_accumulated = std::max(max_accumulated, hough.at<float>(j, i));
         }
     }
-
     // заменим каждый пиксель с яркости X на яркость X*255.0f/max_accumulated (т.е. уменьшим диапазон значений)
     cv::imwrite("lesson08/resultsData/" + name + "_2_hough_normalized.png", hough*255.0f/max_accumulated);
 
-// TODO здесь может быть полезно сгладить пространство Хафа, см. комментарии на сайте - https://www.polarnick.com/blogs/239/2021/school239_11_2021_2022/2021/11/09/lesson9-hough2-interpolation-extremum-detection.html
+    // TODO здесь может быть полезно сгладить пространство Хафа, см. комментарии на сайте - https://www.polarnick.com/blogs/239/2021/school239_11_2021_2022/2021/11/09/lesson9-hough2-interpolation-extremum-detection.html
 
-// TODO реализуйте функцию которая ищет и перечисляет локальные экстремумы - findLocalExtremums(...)
+    // TODO реализуйте функцию которая ищет и перечисляет локальные экстремумы - findLocalExtremums(...)
     std::vector<PolarLineExtremum> lines = findLocalExtremums(hough);
 
-// TODO реализуйте фильтрацию прямых - нужно оставлять только те прямые, у кого много голосов (реализуйте функцию filterStrongLines(...) ):
-//    double thresholdFromWinner = 0.5; // хотим оставить только те прямые у кого не менее половины голосов по сравнению с самой популярной прямой
-//    lines = filterStrongLines(lines, thresholdFromWinner);
+    // TODO реализуйте фильтрацию прямых - нужно оставлять только те прямые, у кого много голосов (реализуйте функцию filterStrongLines(...) ):
+    double thresholdFromWinner = 0.8; // хотим оставить только те прямые у кого не менее половины голосов по сравнению с самой популярной прямой
+    lines = filterStrongLines(lines, thresholdFromWinner);
 
     std::cout << "Found " << lines.size() << " extremums:" << std::endl;
     for (int i = 0; i < lines.size(); ++i) {
@@ -78,19 +77,19 @@ int main() {
     try {
         test("line01");
 
-//        test("line02");
+        test("line02");
 
-//        test("line11");
+        test("line11");
 
-//        test("line12");
+        test("line12");
 
-//        test("line21_water_horizont");
+        test("line21_water_horizont");
 
-//        test("multiline1_paper_on_table");
+        test("multiline1_paper_on_table");
 
-//        test("multiline2_paper_on_table");
+        test("multiline2_paper_on_table");
 
-//        test("valve");
+        test("valve");
 
         return 0;
     } catch (const std::exception &e) {
@@ -98,4 +97,3 @@ int main() {
         return 1;
     }
 }
-
