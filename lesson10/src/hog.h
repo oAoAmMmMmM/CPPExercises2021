@@ -20,3 +20,6 @@ std::ostream& operator << (std::ostream& os, const HoG& hog);
 
 // TODO эту функцию вам надо реализовать
 double distance(HoG a, HoG b);
+
+double p(double x, double y);
+

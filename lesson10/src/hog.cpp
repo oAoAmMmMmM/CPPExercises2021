@@ -1,5 +1,5 @@
 #include "hog.h"
-
+#include "math.h"
 #include <libutils/rasserts.h>
 
 #include <opencv2/imgproc.hpp>
@@ -20,8 +20,11 @@ HoG buildHoG(cv::Mat grad_x, cv::Mat grad_y) {
     HoG hog;
 
     // TODO
-    // 1) увеличьте размер вектора hog до NBINS (ведь внутри это просто обычный вектор вещественных чисел)
-    // 2) заполните его нулями
+    // 1) увеличьте размер вектора hog до NBINS (ведь внутри это просто обычный вектор вещественных чисел) - yes
+    for(int i =0; i < NBINS; i++) {
+        hog.push_back(0);
+    }
+    // 2) заполните его нулями - yes
     // 3) пробегите по всем пикселям входной картинки и посмотрите на каждый градиент
     // (определенный двумя числами: dx проекцией на ось x в grad_x, dy проекцией на ось y в grad_y)
     // 4) определите его силу (корень из суммы квадратов), определите его угол направления:
@@ -34,11 +37,12 @@ HoG buildHoG(cv::Mat grad_x, cv::Mat grad_y) {
             float dy = grad_y.at<float>(j, i);
             float strength = sqrt(dx * dx + dy * dy);
 
-            if (strength < 10) // пропускайте слабые градиенты, это нужно чтобы игнорировать артефакты сжатия в jpeg (например в line01.jpg пиксели не идеально белые/черные, есть небольшие отклонения)
+            if (strength < 10) { // пропускайте слабые градиенты, это нужно чтобы игнорировать артефакты сжатия в jpeg (например в line01.jpg пиксели не идеально белые/черные, есть небольшие отклонения)
                 continue;
-
+            }
+            double angle = atan2(dx, dy) + M_PI;
             // TODO рассчитайте в какую корзину нужно внести голос
-            int bin = -1;
+            int bin = angle / (M_PI/4) - 1;
 
             rassert(bin >= 0, 3842934728039);
             rassert(bin < NBINS, 34729357289040);
@@ -75,11 +79,17 @@ HoG buildHoG(cv::Mat originalImg) {
 // HoG[22.5=0%, 67.5=78%, 112.5=21%, 157.5=0%, 202.5=0%, 247.5=0%, 292.5=0%, 337.5=0%]
 std::ostream &operator<<(std::ostream &os, const HoG &hog) {
     rassert(hog.size() == NBINS, 234728497230016);
-
+    double all = 0;
     // TODO
+    for(int i = 0; i< NBINS; i++) {
+        all+=hog.at(i);
+    }
     os << "HoG[";
+    double angleInDegrees = 22.5;
     for (int bin = 0; bin < NBINS; ++bin) {
-//        os << angleInDegrees << "=" << percentage << "%, ";
+        double percentage = (hog.at(bin)/all)*100;
+        os << angleInDegrees << "=" << percentage << "%, ";
+        angleInDegrees+=45;
     }
     os << "]";
     return os;
@@ -89,15 +99,49 @@ double pow2(double x) {
     return x * x;
 }
 
+double p(double x, double y){
+    return double ((x/y)*100);
+}
+
 // TODO реализуйте функцию которая по двум гистограммам будет говорить насколько они похожи
 double distance(HoG a, HoG b) {
     rassert(a.size() == NBINS, 237281947230077);
     rassert(b.size() == NBINS, 237281947230078);
+    double alla = 0;
+    // TODO
+    for(int i = 0; i< NBINS; i++) {
+        alla+=a.at(i);
+    }
+    double allb = 0;
+    for(int i = 0; i< NBINS; i++) {
+        allb+=b.at(i);
+    }
 
     // TODO рассчитайте декартово расстояние (т.е. корень из суммы квадратов разностей)
     // подумайте - как можно добавить независимость (инвариантность) гистаграммы градиентов к тому насколько контрастная или блеклая картинка?
     // подсказка: на контрастной картинке все градиенты гораздо сильнее, а на блеклой картинке все градиенты гораздо слабее, но пропорции между градиентами (распроцентовка) не изменны!
 
-    double res = 0.0;
+    for (int g = 0; g < 8; g++){
+        a.push_back(a.at(g));
+    }
+
+
+    double res = DBL_MAX;
+    for ( int i = 0; i < 8; i++){
+        double len = pow2(p(a.at(i), alla) - p(b.at(0), allb) );
+        len += pow2(p(a.at(i+1), alla) - p(b.at(1), allb) );
+        len += pow2(p(a.at(i+2), alla) - p(b.at(2), allb) );
+        len += pow2(p(a.at(i+3), alla) - p(b.at(3), allb) );
+        len += pow2(p(a.at(i+4), alla) - p(b.at(4), allb) );
+        len += pow2(p(a.at(i+5), alla) - p(b.at(5), allb) );
+        len += pow2(p(a.at(i+6), alla) - p(b.at(6), allb) );
+        len += pow2(p(a.at(i+7), alla) - p(b.at(7), allb) );
+        len = sqrt(len);
+        if (len < res){
+            res = len;
+        }
+    }
+
+
     return res;
 }

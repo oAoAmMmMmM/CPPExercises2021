@@ -59,7 +59,7 @@ void test(std::string name) {
 
 
     cv::Mat bHough;
-    int blurX = 1;
+    int blurX = 3;
     int blurY = blurX * hough.rows / hough.cols;
     if (blurY % 2 == 0) {
         blurY = blurY + 1;
@@ -68,14 +68,14 @@ void test(std::string name) {
         blurY = blurX;
     }
     cv::blur(hough, bHough, cv::Size(blurX, blurY));
-   // hough = bHough;
+    hough = bHough;
     // TODO здесь может быть полезно сгладить пространство Хафа, см. комментарии на сайте - https://www.polarnick.com/blogs/239/2021/school239_11_2021_2022/2021/11/09/lesson9-hough2-interpolation-extremum-detection.html
     cv::imwrite("lesson09/resultsData/" + name + "_2_hough_normalized.png", hough * 255.0f / max_accumulated);
     // TODO реализуйте функцию которая ищет и перечисляет локальные экстремумы - findLocalExtremums(...)
     std::vector<PolarLineExtremum> lines = findLocalExtremums(hough);
 
     // TODO реализуйте фильтрацию прямых - нужно оставлять только те прямые, у кого много голосов (реализуйте функцию filterStrongLines(...) ):
-    double thresholdFromWinner = 0.8; // хотим оставить только те прямые у кого не менее половины голосов по сравнению с самой популярной прямой
+    double thresholdFromWinner = 0.5; // хотим оставить только те прямые у кого не менее половины голосов по сравнению с самой популярной прямой
     lines = filterStrongLines(lines, thresholdFromWinner);
 
     std::cout << "Found " << lines.size() << " extremums:" << std::endl;

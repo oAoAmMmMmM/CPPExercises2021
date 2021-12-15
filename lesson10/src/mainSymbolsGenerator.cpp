@@ -114,40 +114,72 @@ void experiment1() {
     std::cout << "________Experiment 1________" << std::endl;
     for (char letter = 'a'; letter <= 'z'; ++letter) {
         std::string letterDir = LETTER_DIR_PATH + "/" + letter;
-
+        double f = 0.0;
+        int i = 0;
+        double g = 0.0;
         for (int sampleA = 1; sampleA <= NSAMPLES_PER_LETTER; ++sampleA) {
             for (int sampleB = sampleA + 1; sampleB <= NSAMPLES_PER_LETTER; ++sampleB) {
+                i++;
                 cv::Mat a = cv::imread(letterDir + "/" + std::to_string(sampleA) + ".png");
                 cv::Mat b = cv::imread(letterDir + "/" + std::to_string(sampleB) + ".png");
                 HoG hogA = buildHoG(a);
-                // TODO
+                HoG hogB = buildHoG(b);
+                f += distance(hogA, hogB);
+                if (g < distance(hogA, hogB)){
+                    g = distance(hogA, hogB);
+                }
             }
         }
-//        std::cout << "Letter " << letter << ": max=" << distMax << ", avg=" << (distSum / distN) << std::endl;
+
+        std::cout << "Letter " << letter << ": max=" << g << ", avg=" << (f / i) << std::endl;
     }
 }
 
 void experiment2() {
     // TODO Проведите эксперимент 2:
-    // Для каждой буквы найдите среди остальных наиболее похожую и наименее похожую
+    // Для каждой буквы найдите среди остальных наиболее похожую и наименее похую
     //
     // А так же среди всех минимальных расстояний найдите среднее и выведите его в конце
     //  - Посмотрите и подумайте: как это число соотносится с максимальным расстоянием из прошлого эксперимента?
     //  - Какие буквы невозможно различить закодировав их в HoG?
     //  - Можно ли с этим что-то сделать?
-
+    double n = 0.0;
+    double f = 0.0;
+    double g = 0.0;
+    int i = 0 ;
+    double m = DBL_MAX;
+    char letterMin = 'z';
+    char letterMax = 'a';
     std::cout << "________Experiment 2________" << std::endl;
     for (char letterA = 'a'; letterA <= 'z'; ++letterA) {
         std::string letterDirA = LETTER_DIR_PATH + "/" + letterA;
-
         for (char letterB = 'a'; letterB <= 'z'; ++letterB) {
+            std::string letterDirB = LETTER_DIR_PATH + "/" + letterB;
             if (letterA == letterB) continue;
-
+            for (int sampleA = 1; sampleA <= NSAMPLES_PER_LETTER; ++sampleA) {
+                for (int sampleB = 1; sampleB <= NSAMPLES_PER_LETTER; ++sampleB) {
+                    cv::Mat a = cv::imread(letterDirA + "/" + std::to_string(sampleA) + ".png");
+                    cv::Mat b = cv::imread(letterDirB + "/" + std::to_string(sampleB) + ".png");
+                    HoG hogA = buildHoG(a);
+                    HoG hogB = buildHoG(b);
+                    f += distance(hogA, hogB);
+                    if (g < distance(hogA, hogB)){
+                        g = distance(hogA, hogB);
+                        letterMax = letterB;
+                    }
+                    if (m > distance(hogA, hogB)) {
+                        letterMin = letterB;
+                        m = distance(hogA, hogB);
+                    }
+                }
+            }
             // TODO
         }
-
-//        std::cout << "Letter " << letterA << ": max=" << letterMax << "/" << distMax << ", min=" << letterMin << "/" << distMin << std::endl;
+        n += m;
+        i++;
+        std::cout << "Letter " << letterA << ": max=" << letterMax << "/" << g << ", min=" << letterMin << "/" << m << std::endl;
     }
+    std::cout << (n / i);
 }
 
 
