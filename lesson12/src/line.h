@@ -21,9 +21,7 @@ public:
 
     double getYFromX(double x); // метод прямой позволяющий рассчитать точку на прямой (найти y по x)
 
-    std::vector<cv::Point2f> generatePoints(int n,
-                                        double fromX, double toX,
-                                        double gaussianNoiseSigma); // метод прямой генерирующий n точек неподалеку от прямой
+    std::vector<cv::Point2f> generatePoints(int n,double fromX, double toX,double gaussianNoiseSigma); // метод прямой генерирующий n точек неподалеку от прямой
 };
 
 Line fitLineFromTwoPoints(cv::Point2f a, cv::Point2f b);

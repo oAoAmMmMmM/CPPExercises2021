@@ -11,9 +11,9 @@ void test1() {
     cv::Scalar blueRed(255, 0, 255);
 
     std::string results = "lesson12/resultsData/";
-    if (!std::filesystem::exists(results)) { // если папка еще не создана
-        std::filesystem::create_directory(results); // то создаем ее
-    }
+  //  if (!std::filesystem::exists(results)) { // если папка еще не создана
+  //      std::filesystem::create_directory(results); // то создаем ее
+ //   }
 
     // нарисуйте на листочке эту прямую, т.е. множество точек соответствующих уравнению 0.5*x-y+5=0
     Line line(0.5, -1, 5);
