@@ -11,6 +11,8 @@ find_package(OpenCV 4.5.1 REQUIRED)
 
 set(SOURCES
         src/parseSymbols.cpp
+        src/hog.cpp
+        src/hog.h
         src/parseSymbols.h)
 
 set(LIBRARIES

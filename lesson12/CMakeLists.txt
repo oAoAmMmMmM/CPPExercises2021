@@ -11,7 +11,7 @@ find_package(OpenCV 4.5.1 REQUIRED)
 
 set(SOURCES
         src/line.cpp
-        src/line.h)
+        src/line.h src/line.cpp)
 
 set(LIBRARIES
         libutils
