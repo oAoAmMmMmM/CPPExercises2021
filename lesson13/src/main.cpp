@@ -50,7 +50,8 @@ void test1() {
     std::cout << "Detecting SIFT keypoints and describing them (computing their descriptors)..." << std::endl;
     detector->detectAndCompute(img0, cv::noArray(), keypoints0, descriptors0);
     detector->detectAndCompute(img1, cv::noArray(), keypoints1, descriptors1);
-    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size() << std::endl;
+    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size()
+              << std::endl;
 
     {
 
@@ -60,7 +61,6 @@ void test1() {
         cv::imwrite(results + "01keypoints0.jpg", img0withKeypoints);
         cv::imwrite(results + "01keypoints1.jpg", img1withKeypoints);
     }
-
 
 
     std::vector<std::vector<cv::DMatch>> matches01;
@@ -82,20 +82,21 @@ void test1() {
     }
 
     std::vector<double> distances01;
-    for (auto & i : matches01) {
+    for (auto &i: matches01) {
         distances01.push_back(i[0].distance);
     }
     std::sort(distances01.begin(), distances01.end());
-    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2] << "/" << distances01[distances01.size() - 1] << std::endl;
-    for (int k = 0; k < 2; ++k) {
+    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2]
+              << "/" << distances01[distances01.size() - 1] << std::endl;
+    for (int j = 0; j < 2; ++j) {
         std::vector<cv::DMatch> matchesK;
         for (int i = 0; i < matches01.size(); ++i) {
-            matchesK.push_back(matches01[i][k]);
+            matchesK.push_back(matches01[i][j]);
         }
 
         cv::Mat imgWithMatches;
         cv::drawMatches(img0, keypoints0, img1, keypoints1, matchesK, imgWithMatches);
-        cv::imwrite(results + "02matches01_k" + std::to_string(k) + ".jpg", imgWithMatches);
+        cv::imwrite(results + "02matches01_k" + std::to_string(j) + ".jpg", imgWithMatches);
     }
 
 
@@ -116,11 +117,12 @@ void test1() {
     }
 
     std::vector<double> distances10;
-    for (auto & i : matches10) {
+    for (auto &i: matches10) {
         distances10.push_back(i[0].distance);
     }
     std::sort(distances10.begin(), distances10.end());
-    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2] << "/" << distances10[distances10.size() - 1] << std::endl;
+    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2]
+              << "/" << distances10[distances10.size() - 1] << std::endl;
     for (int k = 0; k < 2; ++k) {
         std::vector<cv::DMatch> matchesK;
         for (int i = 0; i < matches10.size(); ++i) {
@@ -148,13 +150,13 @@ void test1() {
 
         bool isOk = true;
 
-        if (match.distance > distances01[distances01.size()/2]) {
+        if (match.distance > distances01[distances01.size() / 2]) {
             isOk = false;
         }
 
         double k = 0.7;
         cv::DMatch match2 = matches01[i][1];
-        if (match.distance > k*match2.distance) {
+        if (match.distance > k * match2.distance) {
             isOk = false;
         }
 
@@ -235,13 +237,11 @@ void test1() {
     cv::imwrite(results + "07img0to1.jpg", img0to1);
 
 
-
-
     cv::imwrite(results + "08img0.jpg", img0);
 
     cv::Mat H10 = H01.inv();
     cv::Mat img1to0;
-    cv::warpPerspective(img1,img1to0, H10, img0.size());
+    cv::warpPerspective(img1, img1to0, H10, img0.size());
     cv::imwrite(results + "09img1to0.jpg", img1to0);
 
     img1to0 = img0.clone();
@@ -255,8 +255,6 @@ void test1() {
 
 void test2() {
     std::string caseName = "2_hiking2";
-
-
 
 
     std::string path = "lesson13/data/" + caseName + "/";
@@ -281,7 +279,8 @@ void test2() {
     std::cout << "Detecting SIFT keypoints and describing them (computing their descriptors)..." << std::endl;
     detector->detectAndCompute(img0, cv::noArray(), keypoints0, descriptors0);
     detector->detectAndCompute(img1, cv::noArray(), keypoints1, descriptors1);
-    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size() << std::endl;
+    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size()
+              << std::endl;
 
     {
 
@@ -291,7 +290,6 @@ void test2() {
         cv::imwrite(results + "01keypoints0.jpg", img0withKeypoints);
         cv::imwrite(results + "01keypoints1.jpg", img1withKeypoints);
     }
-
 
 
     std::vector<std::vector<cv::DMatch>> matches01;
@@ -313,11 +311,12 @@ void test2() {
     }
 
     std::vector<double> distances01;
-    for (auto & i : matches01) {
+    for (auto &i: matches01) {
         distances01.push_back(i[0].distance);
     }
     std::sort(distances01.begin(), distances01.end());
-    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2] << "/" << distances01[distances01.size() - 1] << std::endl;
+    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2]
+              << "/" << distances01[distances01.size() - 1] << std::endl;
     for (int k = 0; k < 2; ++k) {
         std::vector<cv::DMatch> matchesK;
         for (int i = 0; i < matches01.size(); ++i) {
@@ -347,11 +346,12 @@ void test2() {
     }
 
     std::vector<double> distances10;
-    for (auto & i : matches10) {
+    for (auto &i: matches10) {
         distances10.push_back(i[0].distance);
     }
     std::sort(distances10.begin(), distances10.end());
-    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2] << "/" << distances10[distances10.size() - 1] << std::endl;
+    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2]
+              << "/" << distances10[distances10.size() - 1] << std::endl;
     for (int k = 0; k < 2; ++k) {
         std::vector<cv::DMatch> matchesK;
         for (int i = 0; i < matches10.size(); ++i) {
@@ -378,14 +378,14 @@ void test2() {
         bool isOk = true;
 
 
-        if (match.distance > distances01[distances01.size()/2]) {
+        if (match.distance > distances01[distances01.size() / 2]) {
             isOk = false;
         }
 
 
         double k = 0.7;
         cv::DMatch match2 = matches01[i][1];
-        if (match.distance > k*match2.distance) {
+        if (match.distance > k * match2.distance) {
             isOk = false;
         }
 
@@ -394,13 +394,6 @@ void test2() {
         if (match10.trainIdx != i) {
             isOk = false;
         }
-
-
-
-
-
-
-
 
 
         if (isOk) {
@@ -471,7 +464,7 @@ void test2() {
 
     cv::Mat H10 = H01.inv();
     cv::Mat img1to0;
-    cv::warpPerspective(img1,img1to0, H10, img0.size());
+    cv::warpPerspective(img1, img1to0, H10, img0.size());
     cv::imwrite(results + "09img1to0.jpg", img1to0);
 
     img1to0 = img0.clone();
@@ -502,7 +495,8 @@ void test3() {
     std::cout << "Detecting SIFT keypoints and describing them (computing their descriptors)..." << std::endl;
     detector->detectAndCompute(img0, cv::noArray(), keypoints0, descriptors0);
     detector->detectAndCompute(img1, cv::noArray(), keypoints1, descriptors1);
-    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size() << std::endl;
+    std::cout << "SIFT keypoints detected and described: " << keypoints0.size() << " and " << keypoints1.size()
+              << std::endl;
 
     {
         cv::Mat img0withKeypoints, img1withKeypoints;
@@ -532,12 +526,13 @@ void test3() {
     }
 
     std::vector<double> distances01;
-    for (auto & i : matches01) {
+    for (auto &i: matches01) {
         distances01.push_back(i[0].distance);
     }
     std::sort(distances01.begin(), distances01.end());
-    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2] << "/" << distances01[distances01.size() - 1] << std::endl;
-    for (int k = 0; k <=1; ++k) {
+    std::cout << "matches01 distances min/median/max: " << distances01[0] << "/" << distances01[distances01.size() / 2]
+              << "/" << distances01[distances01.size() - 1] << std::endl;
+    for (int k = 0; k <= 1; ++k) {
         std::vector<cv::DMatch> matchesK;
         for (int i = 0; i < matches01.size(); ++i) {
             matchesK.push_back(matches01[i][k]);
@@ -566,14 +561,15 @@ void test3() {
     }
 
     std::vector<double> distances10;
-    for (auto & i : matches10) {
+    for (auto &i: matches10) {
         distances10.push_back(i[0].distance);
     }
     std::sort(distances10.begin(), distances10.end());
-    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2] << "/" << distances10[distances10.size() - 1] << std::endl;
-    for (int k = 0; k <=1; ++k) {
+    std::cout << "matches10 distances min/median/max: " << distances10[0] << "/" << distances10[distances10.size() / 2]
+              << "/" << distances10[distances10.size() - 1] << std::endl;
+    for (int k = 0; k <= 1; ++k) {
         std::vector<cv::DMatch> matchesK;
-        for (int i =    0; i < matches10.size();    ++i) {
+        for (int i = 0; i < matches10.size(); ++i) {
             matchesK.push_back(matches10[i][k]);
         }
         cv::Mat imgWithMatches;
@@ -584,7 +580,7 @@ void test3() {
     std::cout << "Filtering matches..." << std::endl;
     std::vector<cv::Point2f> points0, points1;
     std::vector<unsigned char> matchIsGood;
-    int nmatchesGood = 0;
+    int matchesGood = 0;
     for (int i = 0; i < keypoints0.size(); ++i) {
         cv::DMatch match = matches01[i][0];
         rassert(match.queryIdx == i, 234782749278097);
@@ -594,15 +590,15 @@ void test3() {
         points0.push_back(keypoints0[i].pt);
         points1.push_back(keypoints1[j].pt);
 
-        bool isOk =          true;
+        bool isOk = true;
 
-        if (match.distance > distances01[distances01.size()/2]) {
-            isOk =    false;
+        if (match.distance > distances01[distances01.size() / 2]) {
+            isOk = false;
         }
 
         double k = 0.7;
         cv::DMatch match2 = matches01[i][1];
-        if (match.distance > k*match2.distance) {
+        if (match.distance > k * match2.distance) {
             isOk = false;
         }
 
@@ -613,14 +609,8 @@ void test3() {
         }
 
 
-
-
-
-
-
-
         if (isOk) {
-            ++nmatchesGood;
+            ++matchesGood;
             matchIsGood.push_back(true);
         } else {
             matchIsGood.push_back(false);
@@ -628,7 +618,7 @@ void test3() {
     }
     rassert(points0.size() == points1.size(), 3497282579850108);
     rassert(points0.size() == matchIsGood.size(), 3497282579850109);
-    std::cout << nmatchesGood << "/" << points0.size() << " good matches left" << std::endl;
+    std::cout << matchesGood << "/" << points0.size() << " good matches left" << std::endl;
 
     {
         std::vector<cv::DMatch> goodMatches;
@@ -670,7 +660,7 @@ void test3() {
         }
 
 
-        std::cout << "(with " << ninliers << "/" << nmatchesGood << " inliers matches)" << std::endl;
+        std::cout << "(with " << ninliers << "/" << matchesGood << " inliers matches)" << std::endl;
         cv::Mat imgWithInliersMatches;
         cv::drawMatches(img0, inlierKeypoints0, img1, inlierKeypoints1, inliersMatches, imgWithInliersMatches);
         cv::imwrite(results + "05inliersMatches01.jpg", imgWithInliersMatches);
@@ -681,7 +671,7 @@ void test3() {
 
     cv::Mat H10 = H01.inv();
     cv::Mat img1to0;
-    cv::warpPerspective(img1,img1to0, H10, img0.size());
+    cv::warpPerspective(img1, img1to0, H10, img0.size());
     cv::imwrite(results + "09img1to0.jpg", img1to0);
 
     img1to0 = img0.clone();
@@ -700,11 +690,9 @@ int main() {
         test2();
         test3();
 
-
-
         return 0;
     } catch (const std::exception &e) {
         std::cout << "Exception! " << e.what() << std::endl;
         return 1;
     }
-}
+}  
