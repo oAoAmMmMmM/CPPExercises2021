@@ -39,7 +39,6 @@ void run() {
     int nvertices, medges;
     std::cin >> nvertices;
     std::cin >> medges;
-    std :: cout  << "1";
     std::vector<std::vector<Edge>> edges_by_vertex(nvertices);
     std::vector<bool> edg_be(nvertices, false);
     for (int i = 0; i < medges; ++i) {
@@ -56,40 +55,49 @@ void run() {
         Edge edgeAB(ai, bi, w);
         edges_by_vertex[ai].push_back(edgeAB);
 
-        edges_by_vertex[bi].push_back(Edge(bi, ai, w)); // а тут - обратное ребро, можно конструировать объект прямо в той же строчке где он и потребовался
+        edges_by_vertex[bi].push_back(Edge(bi, ai,
+                                           w)); // а тут - обратное ребро, можно конструировать объект прямо в той же строчке где он и потребовался
     }
+
 
     int start = 0;
     const int finish = nvertices - 1;
     const int INF = std::numeric_limits<int>::max();
-    Edge a(0,0,0);
+    Edge a(0, 0, 0);
     int s = 0;
     std::vector<int> distances(nvertices, INF);
     distances.at(0) = 0;
     int min = INF;
     int num = 0;
+    std::vector<std::string> put(nvertices, "");
     std::vector<int> first_s;
     first_s.push_back(0);
     std::vector<int> second_s;
     // TODO ...
     while (true) {
-        for(int i = 0; i < first_s.size(); i++) {
-            for(int k =0; k < edges_by_vertex[first_s.at(i)].size(); k++) {
+        for (int i = 0; i < first_s.size(); i++) {
+            for (int k = 0; k < edges_by_vertex[first_s.at(i)].size(); k++) {
                 a = edges_by_vertex[first_s.at(i)].at(k);
-                if((!found(second_s, a.v)) && (!edg_be.at(first_s.at(i)))) {
+                if ((!edg_be.at(first_s.at(i))) && (!found(second_s, a.v))) {
                     second_s.push_back(a.v);
                 }
-                if(distances.at(a.v) > distances.at(a.u) + a.w) {
+                if (distances.at(a.v) > distances.at(a.u) + a.w) {
                     distances.at(a.v) = distances.at(a.u) + a.w;
+                    put.at(a.v) = put.at(a.u) + " " + std::to_string(a.v + 1);
                 }
             }
             edg_be.at(first_s.at(i)) = true;
         }
-        if(second_s.empty()) {
+        if (second_s.empty()) {
             break;
         }
         first_s = second_s;
         second_s = std::vector<int>();
+    }
+    if (put.at(nvertices-1) == "") {
+        std::cout << "-1";
+    } else {
+        std::cout << "1" + put.at(nvertices - 1);
     }
 
 //    while (true) {
@@ -110,15 +118,11 @@ void run() {
 using namespace std;
 
 int main() {
-    int a;
-    cin >> a;
-    cout << "1";
     try {
-  //      run();
+        run();
 
-        return 0;
+
     } catch (const std::exception &e) {
         std::cout << "Exception! " << e.what() << std::endl;
-        return 1;
     }
 }
