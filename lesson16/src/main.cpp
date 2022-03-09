@@ -13,10 +13,16 @@
 
 bool isPixelEmpty(cv::Vec3b color) {
     // TODO 1 реализуйте isPixelEmpty(color):
+    if((color[0] <= 0) && (color[1] <= 0) && (color[2] <= 0)) {
+        return true;
+    } else {
+        return false;
+    }
+
     // - верните true если переданный цвет - полностью черный (такие пиксели мы считаем пустыми)
     // - иначе верните false
     rassert(false, "325235141242153: You should do TODO 1 - implement isPixelEmpty(color)!");
-    return true;
+    //  return true;
 }
 
 void run(std::string caseName) {
@@ -73,7 +79,7 @@ void run(std::string caseName) {
     // Находим матрицу преобразования второй картинки в систему координат первой картинки
     cv::Mat H10 = cv::findHomography(points1, points0, cv::RANSAC, 3.0);
     rassert(H10.size() == cv::Size(3, 3), 3482937842900059); // см. документацию https://docs.opencv.org/4.5.1/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780
-                                                                             // "Note that whenever an H matrix cannot be estimated, an empty one will be returned."
+    // "Note that whenever an H matrix cannot be estimated, an empty one will be returned."
 
     // создаем папку в которую будем сохранять результаты - lesson16/resultsData/ИМЯ_НАБОРА/
     std::string resultsDir = "lesson16/resultsData/";
@@ -128,8 +134,35 @@ void run(std::string caseName) {
 
     // TODO 1 реализуйте isPixelEmpty(color) объявленную в начале этого файла - она пригодится нам чтобы легко понять какие пиксели в панораме пустые, какие - нет
     // (т.е. эта функция позволит дальше понимать в этот пиксель наложилась исходная картинка или же там все еще тьма)
-
+    cv::Vec3b c;
+    c[0] = 0;
+    c[1] = 0;
+    c[2] = 0;
+    cv::Vec3b w;
+    w[0] = 255;
+    w[1] = 255;
+    w[2] = 255;
+    int k = 0;
     cv::Mat panoDiff(pano_rows, pano_cols, CV_8UC3, cv::Scalar(0, 0, 0));
+    panoDiff = panoBothNaive.clone();
+    for(int i = 0; i < pano0.cols; i++) {
+        for(int e = 0; e < pano0.rows; e++) {
+            if(isPixelEmpty(pano0.at<cv::Vec3b>(e, i))) {
+                k++;
+            } if(isPixelEmpty(pano1.at<cv::Vec3b>(e, i))) {
+                k++;
+            }
+            if(k == 0){
+                //ytt,bxtcrjt eckjdbt ghj cthsq
+            } else if (k == 1){
+                panoDiff.at<cv::Vec3b>(e, i) = w;
+            } else {
+                panoDiff.at<cv::Vec3b>(e, i) = c;
+            }
+            k = 0;
+        }
+    }
+
     // TODO 2 вам надо заполнить panoDiff картинку так чтобы было четко ясно где pano0 картинка (объявлена выше) и pano1 картинка отличаются сильно, а где - слабо:
     // сравните в этих двух картинках пиксели по одинаковым координатам (т.е. мы сверяем картинки) и покрасьте соответствующий пиксель panoDiff по этой логике:
     // - если оба пикселя пустые - проверяйте это через isPixelEmpty(color) (т.е. цвета черные) - результат тоже пусть черный
@@ -148,7 +181,7 @@ int main() {
         run("1_hanging"); // TODO 3 проанализируйте результаты по фотографиям с дрона - где различие сильное, где малое? почему так?
         run("2_hiking"); // TODO 4 проанализируйте результаты по фотографиям с дрона - где различие сильное, где малое? почему так?
         run("3_aero"); // TODO 5 проанализируйте результаты по фотографиям с дрона - где различие сильное, где малое? почему так?
-        run("4_your_data"); // TODO 6 сфотографируйте что-нибудь сами при этом на второй картинке что-то изменив, проведите анализ
+        //     run("4_your_data"); // TODO 6 сфотографируйте что-нибудь сами при этом на второй картинке что-то изменив, проведите анализ
         // TODO 7 проведите анализ результатов на базе Вопросов-Упражнений предложенных в последней статье "Урок 19: панорама и визуализация качества склейки"
 
         return 0;
